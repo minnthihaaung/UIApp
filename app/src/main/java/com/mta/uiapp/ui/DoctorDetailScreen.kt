@@ -1,7 +1,7 @@
 package com.mta.uiapp.ui
 
-import android.graphics.drawable.Icon
 import android.os.Build.VERSION_CODES
+import androidx.activity.compose.BackHandler
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -9,7 +9,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -24,7 +23,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
@@ -54,16 +52,22 @@ import com.mta.uiapp.R
 
 @RequiresApi(VERSION_CODES.M)
 @Composable
-fun DoctorDetailScreen() {
+fun DoctorDetailScreen(
+  onBackPressed: () -> Unit,
+) {
+  BackHandler {
+    onBackPressed()
+  }
   Column(
     modifier = Modifier
       .fillMaxSize()
+      .verticalScroll(rememberScrollState())
   ) {
-    TopColumn()
+    TopColumn(onBackPressed)
     Column(modifier = Modifier.padding(horizontal = 16.dp)) {
       Spacer(modifier = Modifier.height(16.dp))
       AboutDoctor(
-        text = "Dr. Sandy is a top specialist at London Bridge Hospital at London.She has achieved several awards and recognition for is contribution and service in her own field. She is available for private consultation. "
+        text = "Dr. Phyo is a top specialist at London Bridge Hospital at London.She has achieved several awards and recognition for is contribution and service in her own field. She is available for private consultation. "
       )
       Spacer(modifier = Modifier.height(16.dp))
       DateSection()
@@ -205,9 +209,9 @@ fun DateItem(
       )
       .padding(horizontal = 8.dp, vertical = 24.dp)
   ) {
-    Text(text = day, color = Color.Gray)
+    Text(text = day, color = if (selected) Color(0xFF5185FE) else Color.Gray)
     Spacer(modifier = Modifier.height(8.dp))
-    Text(text = "$date")
+    Text(text = "$date", color = if (selected) Color(0xFF5185FE)else Color.Black)
   }
 }
 
@@ -267,7 +271,7 @@ fun ItemCard(
 
 @RequiresApi(VERSION_CODES.M)
 @Composable
-fun TopColumn() {
+fun TopColumn(onBackPressed: () -> Unit) {
   Column(
     modifier = Modifier
       .fillMaxWidth()
@@ -276,7 +280,7 @@ fun TopColumn() {
       .padding(16.dp)
   ) {
     IconButton(onClick = {
-
+      onBackPressed()
     }) {
       Icon(imageVector = Icons.Default.ArrowBack, contentDescription = null)
     }

@@ -1,15 +1,16 @@
 package com.mta.uiapp.ui
 
 import android.os.Build.VERSION_CODES
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -48,7 +49,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.ContentScale.Companion
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -63,11 +63,13 @@ import com.mta.uiapp.R.string
 @RequiresApi(VERSION_CODES.M)
 @Composable
 fun HomeScreen(
+  onDoctorDetailClicked: () -> Unit,
 ) {
   Column(
     modifier = Modifier
       .fillMaxSize()
       .padding(horizontal = 16.dp)
+      .verticalScroll(rememberScrollState())
   ) {
     GreetingRow(
       name = "Tommy", imgResource = painterResource(id = drawable.ic_wave_round)
@@ -80,9 +82,9 @@ fun HomeScreen(
     Spacer(modifier = Modifier.height(16.dp))
     DoctorSpecialitiesSection()
     Spacer(modifier = Modifier.height(16.dp))
-    TopDoctorsSection()
+    TopDoctorsSection(onDoctorDetailClicked)
     Spacer(modifier = Modifier.height(8.dp))
-    AvailableDoctorsSection()
+    AvailableDoctorsSection(onDoctorDetailClicked)
     Spacer(modifier = Modifier.height(16.dp))
   }
 }
@@ -196,7 +198,7 @@ fun Category(name: String = "General") {
 }
 
 @Composable
-fun TopDoctorsSection() {
+fun TopDoctorsSection(onDoctorDetailClicked: () -> Unit) {
   Column {
     Row(
       modifier = Modifier.fillMaxWidth(),
@@ -232,14 +234,14 @@ fun TopDoctorsSection() {
         .horizontalScroll(rememberScrollState())
 
     ) {
-      DoctorCard()
-      DoctorCard()
+      DoctorCard(onDoctorDetailClicked)
+      DoctorCard(onDoctorDetailClicked)
     }
   }
 }
 
 @Composable
-fun AvailableDoctorsSection() {
+fun AvailableDoctorsSection(onDoctorDetailClicked: () -> Unit) {
   Column {
     Row(
       modifier = Modifier.fillMaxWidth(),
@@ -261,17 +263,17 @@ fun AvailableDoctorsSection() {
         .horizontalScroll(rememberScrollState())
 
     ) {
-      DoctorCard()
-      DoctorCard()
+      DoctorCard(onDoctorDetailClicked)
+      DoctorCard(onDoctorDetailClicked)
     }
   }
 }
 
 @Composable
 fun DoctorCard(
+  onDoctorDetailClicked: () -> Unit,
   name: String = "Dr. Tommy",
   img: Painter = painterResource(id = drawable.img_doctor),
-  modifier: Modifier = Modifier,
 ) {
   ElevatedCard(
     elevation = CardDefaults.cardElevation(
@@ -283,6 +285,7 @@ fun DoctorCard(
     modifier = Modifier
       .width(200.dp)
       .padding(3.dp)
+      .clickable { onDoctorDetailClicked() }
   ) {
     Column(
       modifier = Modifier
@@ -338,7 +341,10 @@ fun DoctorCard(
           Text(text = "30000 MMK", style = MaterialTheme.typography.titleSmall)
         }
       }
-      Button(modifier = Modifier.fillMaxWidth(), onClick = { }) {
+      Button(modifier = Modifier.fillMaxWidth(), onClick = {
+        onDoctorDetailClicked.invoke()
+        Log.i("Btn clicked: ", "Clicked")
+      }) {
         Text(text = "Make Appointment")
       }
     }
