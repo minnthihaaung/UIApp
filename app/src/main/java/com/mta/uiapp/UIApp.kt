@@ -2,7 +2,6 @@ package com.mta.uiapp
 
 import android.os.Build.VERSION_CODES
 import androidx.annotation.RequiresApi
-import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -29,13 +28,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.mta.uiapp.R.drawable
-import com.mta.uiapp.R.string
 import com.mta.uiapp.ui.DoctorDetailScreen
 import com.mta.uiapp.ui.HomeScreen
 
-enum class UIAppScreen(@StringRes val title: Int) {
-  Home(title = string.home),
-  DoctorDetail(title = string.doctor_detail)
+enum class UIAppScreen {
+  Home,
+  DoctorDetail
 }
 
 @RequiresApi(VERSION_CODES.M)
